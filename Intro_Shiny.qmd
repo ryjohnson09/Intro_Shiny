@@ -1,0 +1,517 @@
+---
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+    logo: images/RStudio-Logo-flat.svg
+    theme: custom.scss
+    footer: <https://shiny.rstudio.com/>
+execute: 
+  eval: true
+  echo: true
+---
+
+<h1>
+
+Introduction to<br>Shiny in R
+
+![](https://raw.githubusercontent.com/rstudio/hex-stickers/de09b6952d5cb350838a70f963c11f0276744feb/SVG/shiny.svg){.absolute top="125" left="500" height="250"}
+
+</h1>
+
+<br> <br>
+
+<hr>
+
+<h3>Ryan Johnson<br>Customer Success Manager at</h3>
+
+![](images/RStudio-Logo-flat.svg){.absolute top="475" left="678" height="65"}
+
+## What we'll cover today
+
+-   What is Shiny?
+-   Basic Structure of a Shiny App
+-   Customizing the **User Interface**
+-   The **Server Function**
+-   Inputs and Outputs
+-   Reactivity
+-   Sharing your Application!
+
+## Follow along?
+
+1.  Open the [RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)
+
+2.  Install and load `shiny`
+
+```{r message=FALSE, eval=FALSE}
+# Install the Shiny package (do this once!)
+install.packages("shiny")
+
+# Load the Shiny package (do this every R session)
+library(shiny)
+```
+
+## What is Shiny for R?
+
+-   Shiny lets us build fully interactive web applications from **R code.**
+
+-   No knowledge of **HTML**, **CSS**, **JavaScript**, etc. Only **R**!
+
+-   Extremely **flexible** and **customizable**
+
+![](https://d33wubrfki0l68.cloudfront.net/0c97eee3d8fc820f3a8d670c08b286e8a524257b/e426c/cover.png){.absolute bottom="50" left="50" height="250"}
+
+![](https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/shiny.png){.absolute bottom="50" left="320" height="250"}
+
+![](images/Shiny_website.png){.absolute bottom="50" right="0" height="250"}
+
+## Why Shiny?
+
+::: columns
+::: {.column width="50%"}
+**Other Point-and-click dashboarding tools**
+
+::: incremental
+-   Often closed ecosystems, vendor lock-in
+-   Can be hard to reproduce work or track changes
+-   Can be limited to basic slicing and dicing of data
+:::
+:::
+
+::: {.column width="50%"}
+**Shiny**
+
+::: incremental
+-   Open-source, no lock in
+-   Code-based = reproducible, repeatable, extensible, trackable
+-   Powerful - can do anything you can do in R!
+:::
+:::
+:::
+
+## Let's create a Shiny App!
+
+-   Most apps have **4** components
+
+```{r eval=FALSE}
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage()
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## 1. The Header
+
+-   The first part of your app. **Will be executed first**!
+-   What to put in here: load packages, read in data, basic data transformation.
+
+```{r eval=FALSE}
+# Header
+library(shiny)
+```
+
+## 2. The User Interface
+
+-   The second part of your app. Everything saved to a variable.
+-   Defines the visual layout of your app. **What you touch (inputs). What you see (outputs).**
+
+```{r eval=FALSE}
+# User Interace
+app_ui <- fluidPage()
+```
+
+## 3. The Server Function
+
+-   The third part of your app. Everything saved as a function.
+
+-   The ⚙️ 's of the app. Instructions for building **outputs** (what you see).
+
+```{r eval=FALSE}
+# Server
+app_server <- function(input, output) {}
+```
+
+## 4. `shinyApp()`
+
+-   The fourth part of your app. Tells `shiny` to run the app!
+
+-   Needs to know where to find the **user interface variable** and **server function**.
+
+```{r eval=FALSE}
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## Let's create a Shiny App!
+
+Run this shiny app!
+
+```{r eval=FALSE}
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage()
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## User Interface - Layout
+
+[Shiny Cheat Sheet](https://www.rstudio.com/resources/cheatsheets/)
+
+![](images/Sidebar_layout.png){fig-align="center"}
+
+## User Interface - Layout {auto-animate="true"}
+
+```{r eval=FALSE}
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage()
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## User Interface - Layout {auto-animate="true"}
+
+```{r eval=FALSE}
+#| code-line-numbers: 6-9
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## User Interface - Add input
+
+![](images/Shiny_inputs.png){fig-align="center" width="468"}
+
+## User Interface - Add input {auto-animate="true"}
+
+```{r eval=FALSE}
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## User Interface - Add input {auto-animate="true"}
+
+```{r eval=FALSE}
+#| code-line-numbers: 8-12
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+    ),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## User Interface - Recap
+
+![](images/side_bar_only.png)
+
+## Build our Output
+
+-   All outputs are built within the **server function**
+
+```{r eval=FALSE}
+#| code-line-numbers: 18-19
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+    ),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## Build our Output - A histogram
+
+```{r}
+# Define data
+my_data <- rnorm(1000)
+
+# Draw histogram
+hist(my_data, col = "grey")
+```
+
+## Build our Output - A histogram {auto-animate="true"}
+
+```{r eval=FALSE}
+#| code-line-numbers: 18-19
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+    ),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## Build our Output - A histogram {auto-animate="true"}
+
+```{r eval=FALSE}
+#| code-line-numbers: 18-25
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+    ),
+    mainPanel()
+  )
+)
+
+# Server
+app_server <- function(input, output) {
+  # Define data
+  my_data <- rnorm(1000)
+
+  # Draw histogram
+  hist(my_data, col = "grey")
+}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## Histogram ➡️ User Interface
+
+How do we get the histogram to show here?
+
+![](images/side_bar_only.png)
+
+## Histogram ➡️ User Interface
+
+Sending outputs to the user interface is a three step process:
+
+1.  Build the output using a **render function**
+
+![](images/render_functions.png){fig-align="center"}
+
+## Histogram ➡️ User Interface
+
+Sending outputs to the user interface is a three step process:
+
+1.  Build the output using a **render function**
+2.  Save objects as **output\$\_\_\_\_\_\_**
+
+```{r eval=FALSE}
+# Draw histogram
+output$my_histogram <- renderPlot({hist(my_data, col = "grey")})
+```
+
+## Histogram ➡️ User Interface
+
+Sending outputs to the user interface is a three step process:
+
+1.  Build the output using a **render function**
+2.  Save objects as **output\$\_\_\_\_\_\_**
+3.  Reference output in user interface using an **output function**
+
+```{r eval=FALSE}
+# User Interface
+mainPanel(plotOutput("my_histogram"))
+```
+
+## Histogram ➡️ User Interface
+
+```{r eval=FALSE}
+#| code-line-numbers: "|24|14"
+# Header
+library(shiny)
+
+# User Interface
+app_ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+    ),
+    mainPanel(plotOutput("my_histogram"))
+  )
+)
+
+# Server
+app_server <- function(input, output) {
+  # Define data
+  my_data <- rnorm(1000)
+
+  # Draw histogram
+  output$my_histogram <- renderPlot({hist(my_data, col = "grey")})
+}
+
+# Run app!
+shinyApp(ui = app_ui, server = app_server)
+```
+
+## The Bars Won't Change Colors 😠
+
+![](images/no_color.png)
+
+## Reactivity
+
+![](images/Inputs_Outputs.jpg)
+
+## Reactivity - InputID
+
+```{r eval=FALSE}
+#| code-line-numbers: 2
+radioButtons(
+        inputId = "bar_color",
+        label = "Bar Color",
+        choices = c("grey", "red")
+      )
+```
+
+## Reactivity
+
+![](images/Inputs_Outputs2.jpg){fig-align="center"}
+
+## Reactivity
+
+Add `input$inputID` to code in server function:
+
+```{r eval=FALSE}
+# Draw histogram
+  output$my_histogram <- renderPlot({hist(my_data, col = "grey")})
+```
+
+::: {style="text-align: center"}
+⬇️
+:::
+
+```{r eval=FALSE}
+# Draw histogram
+  output$my_histogram <- renderPlot({hist(my_data, col = input$bar_color)})
+```
+
+## Reactivity
+
+![](images/grey.png)
+
+## Reactivity
+
+![](images/red.png)
+
+## Share your Shiny App!
+
+![](images/publish_app.png){fig-align="center" width="695"}
+
+## Let's Publish our App using RStudio Connect
+
+![](images/Connect.png){fig-align="center" width="528"}
+
+## Review
+
+-   What is Shiny?
+-   Basic Structure of a Shiny App
+-   Customizing the **User Interface**
+-   The **Server Function**
+-   Inputs and Outputs
+-   Reactivity
+-   Sharing your Application!
+
+## Questions? {style="text-align: center"}
+
+![](https://raw.githubusercontent.com/rstudio/hex-stickers/de09b6952d5cb350838a70f963c11f0276744feb/SVG/shiny.svg){fig-align="center" width="346" height="NaN"}
