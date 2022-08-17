@@ -4,3 +4,6 @@
 .Ruserdata
 renv/
 rsconnect/
+.Rdata
+.httr-oauth
+.DS_Store
